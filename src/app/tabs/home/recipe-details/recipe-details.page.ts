@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
+import {Category} from "../../category";
+import {Recipe} from "../../recipe.model";
 
 @Component({
   selector: 'app-recipe-details',
@@ -7,7 +10,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RecipeDetailsPage implements OnInit {
 
-  constructor() { }
+  // @ts-ignore
+  recipe:Recipe;
+  constructor(private activatedRoute:ActivatedRoute,private router:Router) {
+    this.activatedRoute.paramMap.subscribe(paramMap=>{
+      this.recipe={id:paramMap.get('id')!!,authorId:'',ingredients:'',instructions:'',createdAt:new Date(),title:'Title',updatedAt: new Date(),category:Category.breakfast}
+    });
+  }
 
   ngOnInit() {
   }
