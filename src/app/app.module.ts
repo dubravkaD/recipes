@@ -10,7 +10,7 @@ import {RecipeModalComponent} from "./tabs/profile/recipe-modal/recipe-modal.com
 import {RecipeElementComponent} from "./tabs/recipe-element/recipe-element.component";
 
 @NgModule({
-  declarations: [AppComponent, RecipeModalComponent, RecipeElementComponent],
+  declarations: [AppComponent, RecipeModalComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

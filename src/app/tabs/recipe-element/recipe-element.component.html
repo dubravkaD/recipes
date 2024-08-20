@@ -1,3 +1,10 @@
-<p>
-  recipe-element works!
-</p>
+<ion-card routerLink="{{recipe.id}}">
+
+  <ion-card-header>
+    <ion-card-title>{{recipe.title}}</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-text>{{recipe.category}}</ion-text>
+  </ion-card-content>
+
+</ion-card>
