@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {AlertController} from "@ionic/angular";
-import {User} from "../auth.service";
+import {AuthService, User, Profile} from "../auth.service";
 
 @Component({
   selector: 'app-register',
@@ -12,7 +12,11 @@ import {User} from "../auth.service";
 export class RegisterPage implements OnInit {
 
   public registerForm:FormGroup;
-  constructor(public formBuilder:FormBuilder,private router:Router, private alertController:AlertController) {
+  private pro:Profile={
+    idToken:"",
+    displayName:""
+  }
+  constructor(public formBuilder:FormBuilder,private router:Router, private alertController:AlertController,private authService:AuthService) {
     this.registerForm = this.formBuilder.group({
       password: new FormControl('', [Validators.required,Validators.minLength(6)]),
       email: new FormControl('', [Validators.required,Validators.email]),
@@ -23,7 +27,7 @@ export class RegisterPage implements OnInit {
   ngOnInit() {
   }
 
-  register(){
+  submit(){
     if(!this.registerForm.valid){
       this.alertController.create({
         header:"Invalid input",
@@ -57,6 +61,9 @@ export class RegisterPage implements OnInit {
               console.log(user);
               this.router.navigateByUrl("/login");
               this.registerForm.reset();
+              /*if (this.register(user)){
+                this.router.navigateByUrl("/login")
+              }*/
             }
           },
           {
@@ -73,4 +80,20 @@ export class RegisterPage implements OnInit {
     }
   }
 
+  register(user:User){
+    let isComplete = false
+    this.authService.register(user).subscribe(res=>{
+      console.log(res)
+      this.pro.idToken=res.idToken
+      if (user.username != null) {
+        this.pro.displayName = user.username
+      }
+      console.log(this.pro)
+      this.authService.updateProfile(this.pro).subscribe(res=>{
+        console.log(res)
+        isComplete=true
+      })
+    })
+    return isComplete
+  }
 }
