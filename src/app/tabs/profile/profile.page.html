@@ -1,0 +1,25 @@
+<ion-card>
+  <ion-card-header>
+    <ion-avatar>
+      <img alt="Person" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+    </ion-avatar>
+    <ion-card-title>User name</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-list>
+      <ion-item [button]="true" routerLink="/tabs/favorite">
+        My Favorites
+      </ion-item>
+      <ion-item [button]="true" routerLink="/tabs/profile/recipes">
+        My Recipes
+      </ion-item>
+      <ion-item [button]="true" (click)="addRecipe()">
+        Add Recipe
+      </ion-item>
+      <ion-item [button]="true" (click)="logout()">
+        Log out
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+</ion-card>
+
