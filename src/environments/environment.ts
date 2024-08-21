@@ -7,6 +7,7 @@ export const environment = {
   firebaseConfig:{
     // firebase config
     apiKey:"",
+    RealtimeDatabase:""
   }
 };
 

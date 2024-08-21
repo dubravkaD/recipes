@@ -4,6 +4,14 @@
       <ion-back-button defaultHref="/tabs/home"> </ion-back-button>
     </ion-buttons>
     <ion-title>{{recipe.id}}</ion-title>
+    <!--<ion-buttons slot="end">
+      <ion-button (click)="edit()">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="delete()">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>-->
   </ion-toolbar>
 </ion-header>
 
@@ -31,7 +39,7 @@
     </ion-row>
     <ion-row>
       <ion-col>User: {{recipe.authorId}}</ion-col>
-      <ion-col>Posted on: {{recipe.createdAt.toDateString()}}</ion-col>
+      <ion-col>Created on: {{recipe.createdAt.toDateString()}}</ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

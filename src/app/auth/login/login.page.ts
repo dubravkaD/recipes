@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AlertController} from "@ionic/angular";
 import {Router} from "@angular/router";
 import {NgForm} from "@angular/forms";
+import {AuthService} from "../auth.service";
 
 @Component({
   selector: 'app-login',
@@ -10,12 +11,12 @@ import {NgForm} from "@angular/forms";
 })
 export class LoginPage implements OnInit {
 
-  constructor(private router: Router, private alertController: AlertController) { }
+  constructor(private router: Router, private alertController: AlertController,private authService:AuthService) { }
 
   ngOnInit() {
   }
 
-  login(form: NgForm) {
+  submit(form: NgForm) {
     console.log(form.valid);
     if (form.valid === true) {
       console.log(form.controls['email'].value,form.controls['password'].value);
@@ -38,5 +39,9 @@ export class LoginPage implements OnInit {
         }
       );
     }
+  }
+
+  login(email:string,password:string){
+
   }
 }

@@ -12,4 +12,11 @@ export class HomePage implements OnInit {
   ngOnInit() {
   }
 
+  edit() {
+    console.log("edit")
+  }
+
+  delete(){
+
+  }
 }
