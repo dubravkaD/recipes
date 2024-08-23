@@ -34,6 +34,7 @@ export class ProfilePage implements OnInit {
   }
 
   logout() {
+    this.auth.logout()
     this.router.navigateByUrl('/login');
   }
 }

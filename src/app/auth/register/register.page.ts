@@ -44,7 +44,43 @@ export class RegisterPage implements OnInit {
         alert.present();
       });
     }else {
-      this.alertController.create({
+     /* this.register(
+        this.registerForm.controls['username'].value,
+        this.registerForm.controls['email'].value,
+        this.registerForm.controls['password'].value
+      ).subscribe({next:(value)=>{console.log("uspeh")},error:(err)=>{console.log("greska")}})*/
+
+      this.authService.register(
+        this.registerForm.controls['email'].value,
+        this.registerForm.controls['password'].value)
+        .subscribe(
+          {
+            next:(value)=>{
+              console.log("uspeh",value)
+              const profile:Profile={idToken:value.idToken,displayName:this.registerForm.controls['username'].value}
+              this.authService.updateProfile(
+                profile,
+                this.registerForm.controls['password'].value
+              ).subscribe({next:(value)=>{console.log("uspeh display name",value)},error:()=>{console.log("greska display name")}})
+             /* this.registerForm.reset()
+              this.router.navigateByUrl('/login')*/
+            },
+            error:()=>{
+              console.log("greska")
+              this.alertController.create(
+                {
+                  header: 'Authentication failed',
+                  message: 'incorrect email or password',
+                  buttons: ['Okay']
+                }
+              ).then((alert)=>{
+                alert.present()
+              })
+            }
+          }
+        )
+
+      /*this.alertController.create({
         header:"Register",
         message:"Do you want to register",
         buttons:[
@@ -56,14 +92,29 @@ export class RegisterPage implements OnInit {
                 password: this.registerForm.controls['password'].value,
                 uid: '',
                 username: this.registerForm.controls['username'].value
-              };
-              console.log("handler");
-              console.log(user);
-              this.router.navigateByUrl("/login");
-              this.registerForm.reset();
-              /*if (this.register(user)){
+              }
+              console.log("handler")
+              console.log(user)
+
+              this.register(user).subscribe(
+                {next:(value)=>{
+                  console.log(value)
+                  this.registerForm.reset()
+                  this.router.navigateByUrl('/login')
+                }, error:(err)=>{
+                    console.log(err)
+                    console.log("greska")
+                  }
+                })
+
+              /!*if (this.register(user)){
                 this.router.navigateByUrl("/login")
-              }*/
+                this.registerForm.reset()
+              }
+              console.log("greska pri registraciji")*!/
+              /!*if (this.register(user)){
+                this.router.navigateByUrl("/login")
+              }*!/
             }
           },
           {
@@ -75,25 +126,34 @@ export class RegisterPage implements OnInit {
         ],
       }).then((alert:HTMLIonAlertElement)=>{
         alert.present();
-      });
-      console.log(this.registerForm.value);
+      });*/
+      // console.log(this.registerForm.value);
     }
   }
 
-  register(user:User){
-    let isComplete = false
-    this.authService.register(user).subscribe(res=>{
+  register(username:string,email:string,password:string){
+    /*let isComplete = false
+    this.authService.register(user).subscribe({next:(res)=>{
       console.log(res)
       this.pro.idToken=res.idToken
       if (user.username != null) {
         this.pro.displayName = user.username
+      }else {
+        this.pro.displayName=""
       }
       console.log(this.pro)
       this.authService.updateProfile(this.pro,user.password).subscribe(res=>{
         console.log(res)
         isComplete=true
       })
-    })
-    return isComplete
+    },
+    error:(err)=>{
+      console.log(err)
+    }
+      }
+    )
+    return isComplete*/
+    const u:User={username:username,password:password,email:email}
+    return this.authService.register(email,password)
   }
 }

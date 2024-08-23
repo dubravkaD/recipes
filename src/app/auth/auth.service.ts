@@ -19,7 +19,7 @@ export interface AuthResponse {
   localId: string
   expiresIn: string
   registered?: boolean
-  displayName: string
+  displayName?: string
   profilePicture?: string
 }
 
@@ -59,7 +59,7 @@ export class AuthService {
 
   private _isUserAuthenticated=false
   // @ts-ignore
-  userM:UserModel
+  userM:UserModel | null
   // @ts-ignore
   user:User = {username:"",email:"",password:"",uid:""}
   constructor(private httpC:HttpClient) { }
@@ -72,12 +72,34 @@ export class AuthService {
     }
   }
 
-  register(user:User){
+  register(email:string,password:string){
     this._isUserAuthenticated=true
     return this.httpC.post<AuthResponse>(
-      `http://https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebaseConfig.apiKey}`,
-      { email: user.email, password: user.password, returnSecureToken: true }
-    )
+      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebaseConfig.apiKey}`,
+      { email: email, password: password, returnSecureToken: true }
+    ).pipe(tap((data)=>{
+      console.log(data)
+    }))
+    /*.pipe(
+      tap((data)=>{
+        const idToken=data.idToken
+        const username=u.username!!
+        const profile:Profile={idToken:idToken,displayName:username}
+        this.updateProfile(profile,u.password)
+          .subscribe({
+            next:(value)=>{
+              console.log("dobro")
+              console.log(value)
+            },
+            error:(err)=>{
+              console.log("greska")
+              console.log(err)
+            }
+          }
+          )
+      }
+      )
+    )*/
   }
 
   updateProfile(profile:Profile,password:string){
@@ -86,10 +108,11 @@ export class AuthService {
       {idToken:profile.idToken,displayName:profile.displayName,returnSecureToken:true}
     ).pipe(
       tap((data)=>{
-          this.user.uid=data.localId
+        console.log(data)
+          /*this.user.uid=data.localId
           this.user.username=data.displayName
           this.user.password=password
-          this.user.email=data.email
+          this.user.email=data.email*/
       }
       )
     )
@@ -121,11 +144,11 @@ export class AuthService {
   getUserData(){
 
   }
-  /*
+
   logout() {
-    this.userM = null;
+    this.userM = null
   }
-*/
+
 
   getUsername(){
     /*if (this.user.username === undefined)
@@ -133,7 +156,8 @@ export class AuthService {
     return this.user.username
   }
   getToken() {
-    return this.userM.token
+    // @ts-ignore
+    return this.userM.token!!
   }
   getUserId() {
     return this.user.uid

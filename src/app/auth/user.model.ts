@@ -8,4 +8,5 @@ export class UserModel{
     }
     return this._token
   }
+
 }
