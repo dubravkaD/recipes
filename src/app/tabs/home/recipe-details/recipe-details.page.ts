@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Category} from "../../category";
 import {Recipe} from "../../recipe.model";
 import {AlertController} from "@ionic/angular";
+import {AuthService} from "../../../auth/auth.service";
 
 @Component({
   selector: 'app-recipe-details',
@@ -13,10 +14,14 @@ export class RecipeDetailsPage implements OnInit {
 
   // @ts-ignore
   recipe:Recipe;
-  constructor(private activatedRoute:ActivatedRoute,private router:Router,private alertController: AlertController) {
+  uid:string | undefined=""
+  username:string | undefined=""
+  constructor(private activatedRoute:ActivatedRoute,private router:Router,private alertController: AlertController,private auth:AuthService) {
     this.activatedRoute.paramMap.subscribe(paramMap=>{
       this.recipe={id:paramMap.get('id')!!,authorId:'',ingredients:'',instructions:'',createdAt:new Date(),title:'Title',updatedAt: new Date(),category:Category.breakfast}
-    });
+    })
+    this.uid=this.auth.getUserId()
+    this.username=this.auth.getUsername()
   }
 
   ngOnInit() {

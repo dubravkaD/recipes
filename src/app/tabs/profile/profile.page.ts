@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {ModalController} from "@ionic/angular";
 import {RecipeModalComponent} from "./recipe-modal/recipe-modal.component";
+import {AuthService} from "../../auth/auth.service";
 
 @Component({
   selector: 'app-profile',
@@ -10,7 +11,10 @@ import {RecipeModalComponent} from "./recipe-modal/recipe-modal.component";
 })
 export class ProfilePage implements OnInit {
 
-  constructor(private modalController:ModalController, private router:Router) { }
+  username:string | undefined=""
+  constructor(private modalController:ModalController, private router:Router,private auth:AuthService) {
+    // this.username=this.auth.getUsername()
+  }
 
   ngOnInit() {
   }

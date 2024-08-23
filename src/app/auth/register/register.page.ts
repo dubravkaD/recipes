@@ -89,7 +89,7 @@ export class RegisterPage implements OnInit {
         this.pro.displayName = user.username
       }
       console.log(this.pro)
-      this.authService.updateProfile(this.pro).subscribe(res=>{
+      this.authService.updateProfile(this.pro,user.password).subscribe(res=>{
         console.log(res)
         isComplete=true
       })

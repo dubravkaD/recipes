@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   firebaseConfig:{
     // firebase config
-    apiKey:"",
-    RealtimeDatabase:""
+    apiKey:"AIzaSyDRaNhxqwwsEyqfpNpWAa0P14RKXq2doIA",
+    RealtimeDatabase:"https://carrental-1bbdc-default-rtdb.europe-west1.firebasedatabase.app"
   }
 };
 

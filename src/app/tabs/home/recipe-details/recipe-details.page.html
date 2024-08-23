@@ -38,7 +38,8 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col>User: {{recipe.authorId}}</ion-col>
+     <!-- <ion-col *ngIf="recipe.authorId === uid;else notAuthor">Author: {{username}}</ion-col>
+      <ng-template #notAuthor>User: {{recipe.authorId}}</ng-template>-->
       <ion-col>Created on: {{recipe.createdAt.toDateString()}}</ion-col>
     </ion-row>
   </ion-grid>

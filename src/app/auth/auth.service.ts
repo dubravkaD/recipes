@@ -12,13 +12,15 @@ export interface User {
 }
 
 export interface AuthResponse {
-  kind: string;
-  idToken: string;
-  email: string;
-  refreshToken: string;
-  localId: string;
-  expiresIn: string;
-  registered?: boolean;
+  kind: string
+  idToken: string
+  email: string
+  refreshToken: string
+  localId: string
+  expiresIn: string
+  registered?: boolean
+  displayName?: string
+  profilePicture1?: string
 }
 
 export interface Profile{
@@ -58,7 +60,17 @@ export class AuthService {
   private _isUserAuthenticated=false
   // @ts-ignore
   userM:UserModel
+  // @ts-ignore
+  user:User
   constructor(private httpC:HttpClient) { }
+
+  get isUserAuthenticated(): boolean {
+    if (this.userM) {
+      return !!this.userM.token
+    } else {
+      return false
+    }
+  }
 
   register(user:User){
     this._isUserAuthenticated=true
@@ -68,18 +80,27 @@ export class AuthService {
     )
   }
 
-  updateProfile(profile:Profile){
-    return this.httpC.post(
+  updateProfile(profile:Profile,password:string){
+    return this.httpC.post<ProfileResponse>(
       `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${environment.firebaseConfig.apiKey}`,
-      {idToken:profile.idToken,displayName:profile.displayName,photoUrl:"",returnSecureToken:true}
+      {idToken:profile.idToken,displayName:profile.displayName,returnSecureToken:true}
+    ).pipe(
+      tap((data)=>{
+          this.user.uid=data.localId
+          this.user.username=data.displayName
+          this.user.password=password
+          this.user.email=data.email
+      }
+      )
     )
   }
-  login(user:User){
+
+  // https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=
+  login(email:string,password:string){
     this._isUserAuthenticated=true
-    // @ts-ignore
-    return this.httpC.post()<AuthResponse>(
+    return this.httpC.post<AuthResponse>(
       `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.firebaseConfig.apiKey}`,
-      {email:user.email,password:user.password,returnSecureToken:true}
+      {email: email,password: password,returnSecureToken:true}
     ).pipe(tap((data)=>{
       // @ts-ignore
       const exTime= new Date( new Date().getTime()+data.expiresIn*1000)
@@ -87,21 +108,23 @@ export class AuthService {
       this.userM=new UserModel(data.localId, data.email, data.idToken, exTime)
     }))
   }
-  /*logout() {
-    this.userM = null;
-  }*/
 
-  get isUserAuthenticated(): boolean {
-    if (this.userM) {
-      return !!this.userM.token;
-    } else {
-      return false;
-    }
+  getUserData(){
+
+  }
+  /*
+  logout() {
+    this.userM = null;
+  }
+*/
+
+  getUsername(){
+    return this.user.username
   }
   getToken() {
-    return this.userM.token;
+    return this.userM.token
   }
   getUserId() {
-    return this.userM.id;
+    return this.user.uid
   }
 }

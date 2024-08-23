@@ -19,9 +19,31 @@ export class LoginPage implements OnInit {
   submit(form: NgForm) {
     console.log(form.valid);
     if (form.valid === true) {
-      console.log(form.controls['email'].value,form.controls['password'].value);
-      this.router.navigateByUrl('/tabs');
-      form.resetForm();
+      const email:string=form.controls['email'].value
+      const password:string=form.controls['password'].value
+      // console.log(form.controls['email'].value,form.controls['password'].value)
+      console.log(email,password)
+      this.login(email,password)
+        .subscribe({next:()=>{
+          form.resetForm()
+          this.router.navigateByUrl('/tabs')
+        },
+        error:()=>{
+          this.alertController.create(
+            {
+              header: 'Authentication failed',
+              message: 'incorrect email or password',
+              buttons: ['Okay']
+            }
+          ).then((alert)=>{
+            alert.present()
+            form.resetForm()
+          })
+
+        }
+      })
+      /*form.resetForm()
+      this.router.navigateByUrl('/tabs')*/
     } else {
       this.alertController.create({
         header: "Invalid input",
@@ -42,6 +64,6 @@ export class LoginPage implements OnInit {
   }
 
   login(email:string,password:string){
-
+    return this.authService.login(email,password)
   }
 }
