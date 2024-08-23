@@ -19,8 +19,8 @@ export interface AuthResponse {
   localId: string
   expiresIn: string
   registered?: boolean
-  displayName?: string
-  profilePicture1?: string
+  displayName: string
+  profilePicture?: string
 }
 
 export interface Profile{
@@ -61,7 +61,7 @@ export class AuthService {
   // @ts-ignore
   userM:UserModel
   // @ts-ignore
-  user:User
+  user:User = {username:"",email:"",password:"",uid:""}
   constructor(private httpC:HttpClient) { }
 
   get isUserAuthenticated(): boolean {
@@ -106,9 +106,18 @@ export class AuthService {
       const exTime= new Date( new Date().getTime()+data.expiresIn*1000)
       // @ts-ignore
       this.userM=new UserModel(data.localId, data.email, data.idToken, exTime)
+
+      this.user.uid=data.localId
+      this.user.email=data.email
+      this.user.password=password
+      if(data.displayName!== undefined && data.displayName !== null){
+        this.user.username=data.displayName as string
+      }
     }))
   }
-
+  setUser(user:User){
+    this.user=user
+  }
   getUserData(){
 
   }
@@ -119,6 +128,8 @@ export class AuthService {
 */
 
   getUsername(){
+    /*if (this.user.username === undefined)
+      return ""*/
     return this.user.username
   }
   getToken() {

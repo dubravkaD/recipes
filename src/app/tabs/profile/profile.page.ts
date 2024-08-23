@@ -13,7 +13,7 @@ export class ProfilePage implements OnInit {
 
   username:string | undefined=""
   constructor(private modalController:ModalController, private router:Router,private auth:AuthService) {
-    // this.username=this.auth.getUsername()
+    this.username=this.auth.getUsername()
   }
 
   ngOnInit() {
