@@ -10,19 +10,19 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
+  <ion-list *ngFor="let recipe of recipes">
     <ion-item-sliding>
       <ion-item>
-        <app-recipe-element></app-recipe-element>
+        <app-recipe-element [recipe]="recipe"></app-recipe-element>
       </ion-item>
       <ion-item-options>
         <ion-item-option>
-          <ion-button (click)="edit('1')">
+          <ion-button (click)="edit(recipe)">
             <ion-icon name="create-outline"></ion-icon>
           </ion-button>
         </ion-item-option>
         <ion-item-option  color="danger">
-          <ion-button color="danger" (click)="delete('1')">
+          <ion-button color="danger" (click)="delete(recipe.id,recipe)">
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
         </ion-item-option>

@@ -4,6 +4,7 @@ import {Category} from "../../category";
 import {Recipe} from "../../recipe.model";
 import {AlertController} from "@ionic/angular";
 import {AuthService} from "../../../auth/auth.service";
+import {RecipeService} from "../../recipe.service";
 
 @Component({
   selector: 'app-recipe-details',
@@ -14,14 +15,26 @@ export class RecipeDetailsPage implements OnInit {
 
   // @ts-ignore
   recipe:Recipe;
-  uid:string | undefined=""
-  username:string | undefined=""
-  constructor(private activatedRoute:ActivatedRoute,private router:Router,private alertController: AlertController,private auth:AuthService) {
+  constructor(
+    private activatedRoute:ActivatedRoute,
+    private router:Router,
+    private alertController: AlertController,
+    public auth:AuthService,
+    private recipeService:RecipeService
+  ) {
     this.activatedRoute.paramMap.subscribe(paramMap=>{
       this.recipe={id:paramMap.get('id')!!,authorId:'',ingredients:'',instructions:'',createdAt:new Date(),title:'Title',updatedAt: new Date(),category:Category.breakfast}
+      recipeService.readRecipe(paramMap.get('id')!!).subscribe({next:(value)=>{
+          this.recipe.id=value.id
+          this.recipe.authorId=value.authorId
+          this.recipe.title=value.title
+          this.recipe.category=value.category
+          this.recipe.instructions=value.instructions
+          this.recipe.ingredients=value.ingredients
+          this.recipe.updatedAt=new Date()
+          this.recipe.createdAt=new Date()
+        }})
     })
-    this.uid=this.auth.getUserId()
-    this.username=this.auth.getUsername()
   }
 
   ngOnInit() {

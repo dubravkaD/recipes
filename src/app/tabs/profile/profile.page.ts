@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {AlertController, ModalController} from "@ionic/angular";
 import {RecipeModalComponent} from "./recipe-modal/recipe-modal.component";
 import {AuthService} from "../../auth/auth.service";
+import {RecipeDB, RecipeService} from "../recipe.service";
 
 @Component({
   selector: 'app-profile',
@@ -12,7 +13,13 @@ import {AuthService} from "../../auth/auth.service";
 export class ProfilePage implements OnInit {
 
   username:string=""
-  constructor(private modalController:ModalController, private router:Router,private auth:AuthService,private alertController:AlertController){
+  constructor(
+    private modalController:ModalController,
+    private router:Router,
+    private auth:AuthService,
+    private alertController:AlertController,
+    private recipeService:RecipeService
+  ){
 
   }
 
@@ -25,11 +32,25 @@ export class ProfilePage implements OnInit {
       component:RecipeModalComponent,
       componentProps: {title:'Add Recipe'}
     }).then((modal:HTMLIonModalElement)=>{
-      modal.present();
+      modal.present()
       return modal.onDidDismiss();
     }).then((res) =>{
       if(res.role==='add'){
-        console.log(res.data.recipe);
+        console.log(res.data.recipe)
+        const recipeDB:RecipeDB={
+          authorId:this.auth.getUserId(),
+          title:res.data.recipe.title,
+          instructions:res.data.recipe.instructions,
+          ingredients:res.data.recipe.ingredients,
+          category:res.data.recipe.category,
+          createdAt:res.data.recipe.createdAt,
+          updatedAt:res.data.recipe.updatedAt
+        }
+        this.recipeService.createRecipe(recipeDB)
+          .subscribe(
+            {next:()=>{console.log("success")},
+              error:()=>{console.log("error with creating recipe")}}
+          )
       }
     });
   }
