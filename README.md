@@ -1,5 +1,7 @@
 # Recipes 
 
+This is school project build with Ionic/Angular and Firebase REST API. It is simple app for managing recipes.
+
 ## Overview
 
 Recipes is a comprehensive platform for discovering, managing, and sharing recipes. Users can add, edit, and delete recipes. The app also supports user registration and login, enabling personalized experiences.
@@ -45,7 +47,7 @@ _ Create Firebase project and set up your Realtime Database
 
 ```typescript
 firebaseConfig:{
-  apiKey:"YOUR API KEY",
+    apiKey:"YOUR API KEY",
     databaseURL:"YOUR DATABASE URL"
 }  
 ```
@@ -91,6 +93,7 @@ The app will be available at `http://localhost:8100`
 - **Image Handling**: Upload and view images associated with recipes
 
 ## Contributing
+
 To contribute:
 
 1. Fork the repository.
