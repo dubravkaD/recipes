@@ -42,7 +42,7 @@ npm install
 
 **Firebase Setup**:
 
-_ Create Firebase project and set up your Realtime Database
+- Create Firebase project and set up your Realtime Database
 - In src/environments/environments.ts add your apiKey and databaseURL
 
 ```typescript
