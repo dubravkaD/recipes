@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {AuthService} from "../auth/auth.service";
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, map, Observable, tap} from "rxjs";
+import {BehaviorSubject, map, Observable, switchMap, take, tap} from "rxjs";
 import {Recipe} from "./recipe.model";
 import {environment} from "../../environments/environment";
 
@@ -25,9 +25,81 @@ export class RecipeService {
   }
   constructor(private httpClient: HttpClient, private authService: AuthService) { }
 
-  createRecipe(){}
+  createRecipe(recipeDB:RecipeDB){
+    let genID:string
+    const userid=this.authService.getUserId()
+    return this.httpClient.post<{p:string}>(
+      `${environment.firebaseConfig.RealtimeDatabase}/recipes.json`,
+      {
+        authorId:recipeDB.authorId,
+        title:recipeDB.title,
+        ingredients:recipeDB.ingredients,
+        instructions:recipeDB.instructions,
+        category:recipeDB.category,
+        createdAt:recipeDB.createdAt,
+        updatedAt:recipeDB.updatedAt
+      }
+      ).pipe(
+        switchMap((res)=>{
+          genID=res.p
+          return this.recipes
+        }
+        ),take(1),tap((recipes)=>{
+          this._recipe.next(
+            recipes.concat(
+              {
+                id:genID,
+                authorId:recipeDB.authorId,
+                title:recipeDB.title,
+                ingredients:recipeDB.ingredients,
+                instructions:recipeDB.instructions,
+                category:recipeDB.category,
+                createdAt:recipeDB.createdAt,
+                updatedAt:recipeDB.updatedAt
+              }
+              )
+          )
+        }
+        )
+      )
+  }
 
-  updateRecipe(id:string){}
+  updateRecipe(recipe:Recipe){
+    return this.httpClient
+      .put
+      (
+        `${environment.firebaseConfig.RealtimeDatabase}/recipes/${recipe.id}.json`,
+        {
+          authorId:recipe.authorId,
+          title:recipe.title,
+          ingredients:recipe.ingredients,
+          instructions:recipe.instructions,
+          category:recipe.category,
+          createdAt:recipe.createdAt,
+          updatedAt:recipe.updatedAt
+        }
+      )
+      .pipe
+      (
+        switchMap(()=>{return this.recipes}),
+        take(1),
+        tap((recipes)=>{
+          const index=recipes.findIndex((r)=>r.id===recipe.id)
+          const updated=[...recipes]
+          updated[index]={
+            id:recipe.id,
+            title:recipe.title,
+            authorId:recipe.authorId,
+            ingredients:recipe.ingredients,
+            instructions:recipe.instructions,
+            category:recipe.category,
+            createdAt:recipe.createdAt,
+            updatedAt:recipe.updatedAt
+          }
+          this._recipe.next(updated)
+        })
+      )
+  }
 
   readRecipes(){
     return this.httpClient.get<{ [p:string]:RecipeDB }>
@@ -51,14 +123,24 @@ export class RecipeService {
       `${environment.firebaseConfig.RealtimeDatabase}/recipes/${id}.json?auth=${this.authService.getToken()}`
     ).pipe(
       map((data)=>{
-        return {
+        return <Recipe>{
           id,authorId:data.authorId,title:data.title,category:data.category,ingredients:data.ingredients,instructions:data.instructions,createdAt:data.createdAt,updatedAt:data.updatedAt
         }
       })
     )
   }
   deleteRecipe(id:string){
-
+    return this.httpClient.delete(
+      `${environment.firebaseConfig.RealtimeDatabase}/recipes/${id}.json`
+    ).pipe(
+      switchMap(()=>{
+        return this.recipes
+      }),
+      take(1),
+      tap((recs)=>{
+      this._recipe.next(recs.filter((r)=>r.id !== id))
+    })
+    )
   }
 
 }

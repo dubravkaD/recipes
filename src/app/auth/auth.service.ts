@@ -163,7 +163,7 @@ export class AuthService {
     return this.userM.token!!
   }
   getUserId() {
-    return this.user.uid
+    return this.userM?.id!!
   }
 
   getUserEmail() {

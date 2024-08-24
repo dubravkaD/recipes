@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {Recipe} from "../recipe.model";
+import {Subscription} from "rxjs";
+import {ModalController} from "@ionic/angular";
+import {RecipeService} from "../recipe.service";
 
 @Component({
   selector: 'app-home',
@@ -7,11 +11,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePage implements OnInit {
 
-  constructor() { }
+  // @ts-ignore
+  recipes:Recipe[]
+  // subscription:Subscription
+  constructor(private modalController:ModalController,private recipeService:RecipeService) { }
 
   ngOnInit() {
+
   }
 
+  ionViewWillEnter(){
+
+  }
+  ngOnDestroy(){
+
+  }
   edit() {
     console.log("edit")
   }
