@@ -61,7 +61,28 @@ export class RegisterPage implements OnInit {
               this.authService.updateProfile(
                 profile,
                 this.registerForm.controls['password'].value
-              ).subscribe({next:(value)=>{console.log("uspeh display name",value)},error:()=>{console.log("greska display name")}})
+              )
+                .subscribe(
+                  {next:(value)=>{
+                      this.registerForm.reset()
+                      this.router.navigateByUrl('/login')
+                      this.alertController.create({
+                        header:"Registration",
+                        message:"successful registration",
+                        buttons:['Confirm']
+                      })
+                      console.log("uspeh display name",value)
+                    },error:()=>{
+                    this.alertController.create({
+                      header:"Authentication error",
+                      message:"unable to update display name",
+                      buttons:['Cancel']
+                    }).then((alert)=>{
+                      alert.present()
+                    })
+                    console.log("greska display name")
+                  }}
+                )
              /* this.registerForm.reset()
               this.router.navigateByUrl('/login')*/
             },

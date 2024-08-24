@@ -130,12 +130,15 @@ export class AuthService {
       // @ts-ignore
       this.userM=new UserModel(data.localId, data.email, data.idToken, exTime)
 
+      console.log(data.displayName)
       this.user.uid=data.localId
       this.user.email=data.email
       this.user.password=password
-      if(data.displayName!== undefined && data.displayName !== null){
+      this.user.username=data.displayName
+      console.log(this.user)
+      /*if(data.displayName!== undefined && data.displayName !== null){
         this.user.username=data.displayName as string
-      }
+      }*/
     }))
   }
   setUser(user:User){
@@ -153,7 +156,7 @@ export class AuthService {
   getUsername(){
     /*if (this.user.username === undefined)
       return ""*/
-    return this.user.username
+    return this.user.username!!
   }
   getToken() {
     // @ts-ignore
@@ -161,5 +164,9 @@ export class AuthService {
   }
   getUserId() {
     return this.user.uid
+  }
+
+  getUserEmail() {
+    return this.user.email
   }
 }

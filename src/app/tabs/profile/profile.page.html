@@ -3,7 +3,8 @@
     <ion-avatar>
       <img alt="Person" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
     </ion-avatar>
-    <ion-card-title>User name: {{username}}</ion-card-title>
+    <ion-card-title>User Info</ion-card-title>
+    <!--<ng-template #noUsername><ion-card-title>User name</ion-card-title></ng-template>-->
   </ion-card-header>
   <ion-card-content>
     <ion-list>
@@ -13,6 +14,12 @@
       <!--<ion-item [button]="true" routerLink="/tabs/profile/recipes">
         My Recipes
       </ion-item>-->
+      <ion-item [button]="true" (click)="getUsername()">
+        User name
+      </ion-item>
+      <ion-item [button]="true" (click)="getEmail()">
+        Email
+      </ion-item>
       <ion-item [button]="true" (click)="addRecipe()">
         Add Recipe
       </ion-item>
