@@ -29,7 +29,7 @@ export class RecipeService {
     let genID:string
     const userid=this.authService.getUserId()
     return this.httpClient.post<{p:string}>(
-      `${environment.firebaseConfig.RealtimeDatabase}/recipes.json`,
+      `${environment.firebaseConfig.RealtimeDatabase}/recipes.json?auth=${this.authService.getToken()}`,
       {
         authorId:recipeDB.authorId,
         title:recipeDB.title,
@@ -68,7 +68,7 @@ export class RecipeService {
     return this.httpClient
       .put
       (
-        `${environment.firebaseConfig.RealtimeDatabase}/recipes/${recipe.id}.json`,
+        `${environment.firebaseConfig.RealtimeDatabase}/recipes/${recipe.id}.json?auth=${this.authService.getToken()}`,
         {
           authorId:recipe.authorId,
           title:recipe.title,
@@ -131,7 +131,7 @@ export class RecipeService {
   }
   deleteRecipe(id:string){
     return this.httpClient.delete(
-      `${environment.firebaseConfig.RealtimeDatabase}/recipes/${id}.json`
+      `${environment.firebaseConfig.RealtimeDatabase}/recipes/${id}.json?auth=${this.authService.getToken()}`
     ).pipe(
       switchMap(()=>{
         return this.recipes
