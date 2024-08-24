@@ -17,12 +17,12 @@ export class LoginPage implements OnInit {
   }
 
   submit(form: NgForm) {
-    console.log(form.valid);
+    // console.log(form.valid);
     if (form.valid === true) {
       const email:string=form.controls['email'].value
       const password:string=form.controls['password'].value
       // console.log(form.controls['email'].value,form.controls['password'].value)
-      console.log(email,password)
+      // console.log(email,password)
       this.login(email,password)
         .subscribe({next:()=>{
           form.resetForm()

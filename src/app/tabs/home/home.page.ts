@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {Recipe} from "../recipe.model";
 import {Subscription} from "rxjs";
 import {ModalController} from "@ionic/angular";
-import {RecipeService} from "../recipe.service";
+import {RecipeDB, RecipeService} from "../recipe.service";
 import {AuthService} from "../../auth/auth.service";
+import {RecipeModalComponent} from "../profile/recipe-modal/recipe-modal.component";
+import {EditRecipeComponent} from "./edit-recipe/edit-recipe.component";
 
 @Component({
   selector: 'app-home',
@@ -34,10 +36,41 @@ export class HomePage implements OnInit {
   }
   edit(recipe:Recipe) {
     if(recipe.authorId===this.auth.getUserId()){
-      console.log("I am author")
+      this.modalController.create({
+        component:EditRecipeComponent,
+        componentProps: {title:'Update Recipe'}
+      }).then((modal:HTMLIonModalElement)=>{
+        modal.present()
+        return modal.onDidDismiss();
+      }).then((res)=>{
+        if(res.role==='add') {
+          console.log(res.data.recipe)
+          const rec: Recipe = {
+            authorId: this.auth.getUserId(),
+            title: res.data.recipe.title,
+            instructions: res.data.recipe.instructions,
+            ingredients: res.data.recipe.ingredients,
+            category: res.data.recipe.category,
+            createdAt: recipe.createdAt,
+            updatedAt: new Date(),
+            id: recipe.id
+          }
+          this.recipeService.updateRecipe(rec)
+            .subscribe(
+              {
+                next: () => {
+                  console.log("success")
+                },
+                error: () => {
+                  console.log("error with updating recipe")
+                }
+              }
+            )
+        }
+      })
+    }else {
+      alert("You cannot edit recipes that you are not author of")
     }
-    console.log(recipe)
-    console.log("edit")
   }
 
   delete(id:string,recipe:Recipe){

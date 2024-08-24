@@ -8,7 +8,7 @@ import {Recipe} from "../recipe.model";
 })
 export class RecipeElementComponent  implements OnInit {
 
-  @Input() recipe:Recipe = {id:"1",authorId:"1",ingredients:"",instructions:"",category:"Category1",title:"Title1",createdAt:new Date(),updatedAt:new Date()}
+  @Input() recipe:Recipe = {id:"1",authorId:"1",ingredients:"",instructions:"",category:"lunch",title:"Title 1",createdAt:new Date(),updatedAt:new Date()}
 
   constructor() { }
 

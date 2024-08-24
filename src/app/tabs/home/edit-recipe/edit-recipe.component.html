@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon name="chevron-down-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{title}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="editForm">
+    <ion-grid size-sm="6" offset-sm="3">
+      <ion-row>
+        <ion-col>
+          <ion-input type="text" label="title" label-placement="floating" formControlName="rTitle" required></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-select label="category" label-placement="floating" formControlName="category" required>
+            <ion-select-option value="breakfast">Breakfast</ion-select-option>
+            <ion-select-option value="lunch">Lunch</ion-select-option>
+            <ion-select-option value="dinner">Dinner</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-textarea label="ingredients" formControlName="ingredients" required></ion-textarea>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-textarea label="instructions" formControlName="instructions" required></ion-textarea>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <br>
+    <br>
+    <ion-buttons class="ion-justify-content-center">
+      <ion-button fill="solid" shape="round" size="large" [disabled]="editForm.invalid" (click)="save()">
+        Save
+      </ion-button>
+    </ion-buttons>
+  </form>
+</ion-content>
