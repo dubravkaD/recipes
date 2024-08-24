@@ -26,11 +26,11 @@ export class HomePage implements OnInit {
   ngOnDestroy(){
 
   }
-  edit() {
+  edit(id:string) {
     console.log("edit")
   }
 
-  delete(){
-
+  delete(id:string){
+    console.log("delete")
   }
 }
